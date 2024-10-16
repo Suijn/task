@@ -1,4 +1,7 @@
-.PHONY: integration_tests down style reformat
+.PHONY: server integration_tests down style reformat
+
+server:
+	docker compose up --build server
 
 integration_tests:
 	docker compose up --build integration_tests

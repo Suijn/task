@@ -1,6 +1,22 @@
 services:
-  app:
+  server:
     build: .
+    command: server
+    ports:
+      - 8000:8000
+    depends_on:
+      db:
+        condition: service_healthy
+        restart: true
+    environment:
+      SECRET_KEY: top_secret
+      POSTGRES_HOST: db
+      POSTGRES_PORT: 5432
+      POSTGRES_NAME: prefixes_dev
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: very_secret
+      DEBUG: true
+    container_name: task_server
   integration_tests:
     build: .
     command: integration_test
@@ -15,6 +31,8 @@ services:
       POSTGRES_NAME: prefixes_dev
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: very_secret
+      DEBUG: true
+    container_name: task_server
   db:
     image: postgres:17
     healthcheck:

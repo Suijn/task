@@ -1,6 +1,12 @@
 ### Contributing
 There's a Makefile available with a few basic commands.
 
+#### Run app
+```commandline
+make server
+// OR
+sudo make server
+```
 
 #### Run integration tests
 ```commandline
