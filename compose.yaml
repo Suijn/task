@@ -4,3 +4,26 @@ services:
   integration_tests:
     build: .
     command: integration_test
+    depends_on:
+      db:
+        condition: service_healthy
+        restart: true
+    environment:
+      SECRET_KEY: top_secret
+      POSTGRES_HOST: db
+      POSTGRES_PORT: 5432
+      POSTGRES_NAME: prefixes_dev
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: very_secret
+  db:
+    image: postgres:17
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}" ]
+      interval: 10s
+      retries: 5
+      start_period: 30s
+      timeout: 10s
+    environment:
+      POSTGRES_PASSWORD: very_secret
+      POSTGRES_USER: postgres
+      POSTGRES_DB: prefixes_dev
