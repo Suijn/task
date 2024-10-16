@@ -1,0 +1,6 @@
+services:
+  app:
+    build: .
+  integration_tests:
+    build: .
+    command: integration_test
