@@ -17,6 +17,7 @@ server:
 integration_tests:
 	docker volume create ${VOLUME}
 	docker compose up --build integration_tests
+	docker compose down -v
 
 down:
 	docker compose down -v
