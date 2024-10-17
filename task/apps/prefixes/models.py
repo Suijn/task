@@ -1,4 +1,11 @@
+import dataclasses
+
 from django.db import models
+
+
+@dataclasses.dataclass(frozen=True)
+class PrefixRaw:
+    name: str
 
 
 class Prefix(models.Model):
