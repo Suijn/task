@@ -17,41 +17,46 @@ Project root directory: **/task**
 2. Run command.
 
 #### Run app
-```commandline
+```bash
 make server
-// OR
+# OR
 sudo make server
 ```
 
 #### Run integration tests
-```commandline
+```bash
 make integration_tests
-// OR
+# OR
 sudo make integration_tests
 ```
 
 #### Check style
 We use **black**, **flake8** and **isort** to keep the style consistent across the codebase.
 
-To check the codebase for any styling issues run:
-```commandline
-make style
-```
+To check the codebase for any styling issues do:
+1. Set up dev environment
+2. Run
+    ```bash
+    make style
+    ```
+
 
 #### Fix style
 This will automatically fix styling.
 
+1. Set up dev environment
+2. Run
+    ```bash
+    make reformat
+    ```
 **Note**: flake8 issues need to be addressed manually.
-```commandline
-make reformat
-```
 
 #### Default Admin User
 You can create an admin user with:
 
-```commandline
+```bash
 make admin
-// OR
+# OR
 sudo make admin
 ```
 
@@ -60,16 +65,16 @@ This creates an admin with:
 - **Admin password**: admin
 
 #### Clean up docker containers/infra
-```commandline
+```bash
 make down
-// OR
+# OR
 sudo make down
 ```
 **Disclaimer**: This does **NOT** remove Postgres docker volume!\
 To remove Postgres docker volume run additionally:
-```commandline
+```bash
 make down_vol
-// OR
+# OR
 sudo make down_vol
 ```
 
@@ -80,20 +85,31 @@ Project root directory: **/task**
 
 1. cd into the **root directory**.
 2. Set up poetry environment.
-2. Run command.
+3. Export required environment variables.
+4. Run postgres (in a container)
+5. Run command.
 
 #### Django commands
-```commandline
+```bash
 python manage.py ${COMMAND}
 ```
 
 #### Docker & Compose
-```commandline
+```bash
 docker ${COMMAND}
 ```
 
-```commandline
+```bash
 docker compose up --build ${TARGET} 
 ```
 
+### Required environment variables
+If you decide to run the app in a traditional approach, you need to make sure to set up required env variables. 
 
+**Variables**:
+- SECRET_KEY
+
+**Example**:
+```bash
+export SECRET_KEY=top_secret
+```
