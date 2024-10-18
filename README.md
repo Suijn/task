@@ -108,8 +108,12 @@ If you decide to run the app in a traditional approach, you need to make sure to
 
 **Variables**:
 - SECRET_KEY
+- WORKING_MODE
 
 **Example**:
 ```bash
 export SECRET_KEY=top_secret
 ```
+
+#### WORKING_MODE
+Options: {dev}
