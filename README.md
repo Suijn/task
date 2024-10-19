@@ -11,12 +11,10 @@ The preferred way to run commands/interact with the app is through the **Makefil
 This reduces possible issues that you might run into while trying to do it on your own.
 
 #### Commands: Makefile approach (preferred)
-Project root directory: **/task**
-
-1. cd into the **root directory**.
-2. Run command.
 
 #### Run app
+1. Make sure you're in the root directory.
+
 ```bash
 make server
 # OR
@@ -81,9 +79,7 @@ sudo make down_vol
 #### Commands: Traditional approach
 You can go the traditional way:
 
-Project root directory: **/task**
-
-1. cd into the **root directory**.
+1. Make sure you're in the root directory.
 2. Set up poetry environment.
 3. Export required environment variables.
 4. Run postgres (in a container)
