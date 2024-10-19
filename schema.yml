@@ -1,0 +1,47 @@
+openapi: 3.0.3
+info:
+  title: App API docs
+  version: 0.1.0
+  description: This is an **internal** project.
+paths:
+  /api/prefixes/:
+    get:
+      operationId: prefixes_list
+      tags:
+      - prefixes
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Prefix'
+          description: ''
+components:
+  schemas:
+    Prefix:
+      type: object
+      properties:
+        name:
+          type: string
+          maxLength: 255
+        items:
+          type: array
+          items:
+            type: string
+      required:
+      - items
+      - name
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: sessionid
