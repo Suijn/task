@@ -1,3 +1,4 @@
 .idea
 names.csv
 task.txt
+**/__pycache__/**

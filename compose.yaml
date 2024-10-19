@@ -1,0 +1,61 @@
+services:
+  server:
+    build: .
+    command: server
+    ports:
+      - 8000:8000
+    depends_on:
+      db:
+        condition: service_healthy
+        restart: true
+    environment:
+      SECRET_KEY: top_secret
+      WORKING_MODE: dev
+      POSTGRES_HOST: db
+      POSTGRES_PORT: 5432
+      POSTGRES_NAME: prefixes_dev
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: very_secret
+      DEBUG: true
+    container_name: task_server
+  integration_tests:
+    build: .
+    command: integration_test
+    depends_on:
+      db:
+        condition: service_healthy
+        restart: true
+    environment:
+      SECRET_KEY: top_secret
+      WORKING_MODE: dev
+      POSTGRES_HOST: db
+      POSTGRES_PORT: 5432
+      POSTGRES_NAME: prefixes_dev
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: very_secret
+      DEBUG: true
+    container_name: task_server
+    volumes:
+      - dbvolume:/dbvolume
+  db:
+    image: postgres:17
+    ports:
+      - 5432:5432
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}" ]
+      interval: 10s
+      retries: 5
+      start_period: 30s
+      timeout: 10s
+    environment:
+      POSTGRES_PASSWORD: very_secret
+      POSTGRES_USER: postgres
+      POSTGRES_DB: prefixes_dev
+      PGDATA: /dbvolume
+    volumes:
+      - dbvolume:/dbvolume
+
+volumes:
+  dbvolume:
+    name: "dbvolume"
+    external: true
