@@ -29,3 +29,25 @@ class TestPrefixView(TestCase):
         ]
         returned_data = response.json()
         self.assertEqual(expected_data, returned_data)
+
+    def test_retrieve(self):
+        prefix1 = Prefix.objects.create(name="prefix1")
+        Prefix.objects.create(name="prefix2")
+
+        Item.objects.create(name="item1", prefix=prefix1)
+        Item.objects.create(name="item2", prefix=prefix1)
+
+        response = self.client.get(f"/api/prefixes/{prefix1.pk}/")
+        self.assertEqual(200, response.status_code)
+
+        expected_data = {
+            "name": "prefix1",
+            "items": ["item1", "item2"],
+            "pk": prefix1.pk,
+        }
+        returned_data = response.json()
+        self.assertEqual(expected_data, returned_data)
+
+    def test_retrieve__returns_404_if_not_found(self):
+        response = self.client.get("/api/prefixes/prefix999/")
+        self.assertEqual(404, response.status_code)
