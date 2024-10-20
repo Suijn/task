@@ -130,6 +130,26 @@ class TestItemView(TransactionTestCase):
         p1_items = list(p1.items.all())
         self.assertEqual([], p1_items)
 
+    def test_list(self):
+        prefix1 = Prefix.objects.create(name="prefix1")
+        prefix2 = Prefix.objects.create(name="prefix2")
+
+        item1 = Item.objects.create(name="item1", prefix=prefix1)
+        item2 = Item.objects.create(name="item2", prefix=prefix1)
+        item3 = Item.objects.create(name="item3", prefix=prefix2)
+        item4 = Item.objects.create(name="item4", prefix=prefix2)
+        items = {item1, item2, item3, item4}
+
+        response = self.client.get("/api/items/")
+        self.assertEqual(200, response.status_code)
+
+        expected_response = [
+            {"id": item.pk, "name": item.name, "prefix": item.prefix.name}
+            for item in items
+        ]
+        returned_response = response.json()
+        self.assertEqual(expected_response, returned_response)
+
     def test_partial_update__target_prefix_not_found(self):
         prefix1 = Prefix.objects.create(name="prefix1")
         item = Item.objects.create(name="item1", prefix=prefix1)

@@ -93,3 +93,11 @@ class ItemViewSet(viewsets.ViewSet):
 
         serializer_out = ItemSerializerOut(item)
         return Response(serializer_out.data)
+
+    @extend_schema(
+        responses={200: ItemSerializerOut},
+    )
+    def list(self, request):
+        queryset = Item.objects.all()
+        serializer = ItemSerializerOut(queryset, many=True)
+        return Response(serializer.data)
