@@ -1,3 +1,5 @@
+#!/bin/bash
+
 if [ "$1" = "server" ]; then
   echo Runnig server
 
