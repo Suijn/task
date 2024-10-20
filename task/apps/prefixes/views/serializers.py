@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from task.apps.prefixes.models import Prefix
+from task.apps.prefixes.models import Item, Prefix
 
 
 class PrefixSerializer(serializers.ModelSerializer):
@@ -23,3 +23,31 @@ class PrefixSerializer(serializers.ModelSerializer):
             for attr in attributes_to_serialize:
                 representation[attr] = getattr(instance, attr)
         return representation
+
+
+class ItemSerializerOut(serializers.ModelSerializer):
+    """Handle serialization of Items."""
+
+    id = serializers.IntegerField(read_only=True)
+    name = serializers.CharField(read_only=True)
+    prefix = serializers.StringRelatedField(read_only=True)
+
+    class Meta:
+        model = Item
+        fields = ["id", "name", "prefix"]
+
+
+class ItemSerializerIn(serializers.ModelSerializer):
+    """Handle deserialization of items."""
+
+    prefix = serializers.IntegerField(write_only=True)
+
+    class Meta:
+        model = Item
+        fields = ["prefix"]
+
+
+class ConflictSerializerOut(serializers.Serializer):
+    """Serialize conflicts."""
+
+    conflict = serializers.CharField(read_only=True)

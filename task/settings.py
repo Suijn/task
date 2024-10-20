@@ -152,5 +152,8 @@ SPECTACULAR_SETTINGS = {
     "SERVE_INCLUDE_SCHEMA": False,
 }
 
+CONFLICT_ITEM_NOT_FOUND = "Item not found."
+CONFLICT_PREFIX_NOT_FOUND = "Prefix not found."
+
 # Run logging
 setup_logging()

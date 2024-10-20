@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.test import TransactionTestCase
 from rest_framework.test import APIClient
 
@@ -83,3 +84,67 @@ class TestPrefixView(TransactionTestCase):
         expected_items = {("item1", "existing_prefix")}
         returned_items = {(item.name, item.prefix.name) for item in prefix.items.all()}
         self.assertEqual(expected_items, returned_items)
+
+
+class TestItemView(TransactionTestCase):
+    def setUp(self):
+        self.client = APIClient()
+
+    def test_partial_update__move_item_to_another_prefix(self):
+        prefix1 = Prefix.objects.create(name="prefix1")
+        prefix2 = Prefix.objects.create(name="prefix2")
+        item = Item.objects.create(name="item1", prefix=prefix1)
+
+        # Move item to prefix2
+        data_in = {"prefix": prefix2.pk}
+        response = self.client.patch(f"/api/items/{item.pk}/", data=data_in)
+        self.assertEqual(200, response.status_code)
+
+        expected_item = {"id": item.pk, "name": item.name, "prefix": prefix2.name}
+        self.assertEqual(expected_item, response.json())
+
+        # assert item has been moved to prefix2
+        p2 = Prefix.objects.get(name=prefix2.name)
+        p2_items = list(p2.items.all())
+        self.assertEqual(1, len(p2_items))
+        self.assertEqual(item.name, p2_items[0].name)
+
+        # assert item is NOT in prefix1.
+        p1 = Prefix.objects.get(name=prefix1.name)
+        self.assertEqual(set(), set(p1.items.all()))
+
+    def test_partial_update__item_not_found(self):
+        prefix1 = Prefix.objects.create(name="prefix1")
+        non_existing_item = 999
+
+        # Try to move non-existent item to prefix1
+        data_in = {"prefix": prefix1.pk}
+        response = self.client.patch(f"/api/items/{non_existing_item}/", data=data_in)
+        self.assertEqual(409, response.status_code)
+
+        expected_response = {"conflict": settings.CONFLICT_ITEM_NOT_FOUND}
+        self.assertEqual(expected_response, response.json())
+
+        # assert nothing changed in prefix1
+        p1 = Prefix.objects.get(name=prefix1.name)
+        p1_items = list(p1.items.all())
+        self.assertEqual([], p1_items)
+
+    def test_partial_update__target_prefix_not_found(self):
+        prefix1 = Prefix.objects.create(name="prefix1")
+        item = Item.objects.create(name="item1", prefix=prefix1)
+        non_existing_prefix = 999
+
+        # Try to move item to a non_existing prefix.
+        data_in = {"prefix": non_existing_prefix}
+        response = self.client.patch(f"/api/items/{item.pk}/", data=data_in)
+        self.assertEqual(409, response.status_code)
+
+        expected_response = {"conflict": settings.CONFLICT_PREFIX_NOT_FOUND}
+        self.assertEqual(expected_response, response.json())
+
+        # assert item is still in prefix1
+        p1 = Prefix.objects.get(name=prefix1.name)
+        p1_expected_items = {item.name}
+        p1_returned_items = {item.name for item in p1.items.all()}
+        self.assertEqual(p1_expected_items, p1_returned_items)
