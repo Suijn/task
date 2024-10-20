@@ -1,4 +1,4 @@
-.PHONY: server integration_tests down down_vol style reformat admin
+.PHONY: demo server integration_tests down down_vol style reformat admin
 
 # Variables used by the `admin` command.
 # Note: they are very tied with the variables defined in Docker Compose.
@@ -9,6 +9,12 @@ POSTGRES_DB = prefixes_dev
 NETWORK = temporary_network
 VOLUME = dbvolume
 PGDATA = /dbvolume
+
+demo:
+	make admin
+	docker compose up --build server -d
+	docker exec task_server bash -c ".venv/bin/poetry run python manage.py prefixes"
+	docker attach task_server
 
 server:
 	docker volume create ${VOLUME}

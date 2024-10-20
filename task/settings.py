@@ -33,6 +33,8 @@ ALLOWED_HOSTS = ["0.0.0.0", "127.0.0.1"]
 
 # Application definition
 
+PROJECT_APPS = ["task.apps.prefixes"]
+
 INSTALLED_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
@@ -40,8 +42,9 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "task.apps.prefixes",
-]
+    "rest_framework",
+    "drf_spectacular",
+] + PROJECT_APPS
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -137,6 +140,20 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 # --------------------------
 
 WORKING_MODE = os.getenv("WORKING_MODE")
+
+REST_FRAMEWORK = {
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+}
+
+SPECTACULAR_SETTINGS = {
+    "TITLE": "App API docs",
+    "DESCRIPTION": "This is an **internal** project.",
+    "VERSION": "0.1.0",
+    "SERVE_INCLUDE_SCHEMA": False,
+}
+
+CONFLICT_ITEM_NOT_FOUND = "Item not found."
+CONFLICT_PREFIX_NOT_FOUND = "Prefix not found."
 
 # Run logging
 setup_logging()

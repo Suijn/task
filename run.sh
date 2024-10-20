@@ -8,5 +8,5 @@ if [ "$1" = "server" ]; then
   /app/.venv/bin/poetry run gunicorn -b 0.0.0.0:8000 --workers 3 task.wsgi
 else [ "$1" = "integration_test" ];
   echo Runnig integration_tests
-  .venv/bin/poetry run python manage.py test
+  .venv/bin/poetry run python manage.py test -v 1
 fi

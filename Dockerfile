@@ -21,6 +21,7 @@ COPY --chown=$USER:$GROUP poetry.lock poetry.lock
 COPY --chown=$USER:$GROUP task task
 COPY --chown=$USER:$GROUP run.sh run.sh
 COPY --chown=$USER:$GROUP manage.py manage.py
+COPY --chown=$USER:$GROUP data data
 
 FROM base AS build_dependencies
 RUN $VENV_PATH/bin/poetry install --no-cache
