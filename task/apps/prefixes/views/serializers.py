@@ -3,26 +3,36 @@ from rest_framework import serializers
 from task.apps.prefixes.models import Item, Prefix
 
 
-class PrefixSerializer(serializers.ModelSerializer):
-    name = serializers.CharField()
-    items = serializers.StringRelatedField(many=True, read_only=True)
+class PrefixSerializerIn(serializers.ModelSerializer):
+    """Handle deserialization."""
+
+    name = serializers.CharField(write_only=True)
+
+    class Meta:
+        model = Prefix
+        fields = ["name"]
+
+
+class PrefixSerializerOut(serializers.ModelSerializer):
+    """Handle serialization."""
+
+    name = serializers.CharField(read_only=True)
+    items = serializers.StringRelatedField(read_only=True, many=True)
     id = serializers.IntegerField(read_only=True)
 
     class Meta:
         model = Prefix
-        fields = "__all__"
+        fields = ["id", "name", "items"]
 
-    def to_representation(self, instance):
-        representation = super().to_representation(instance)
 
-        # Sometimes we need to overwrite the response schema.
-        if self.context.get("overwrite_schema_out"):
-            # Serialize only the specified attributes.
-            representation = {}
-            attributes_to_serialize = self.context["serialize_attributes"]
-            for attr in attributes_to_serialize:
-                representation[attr] = getattr(instance, attr)
-        return representation
+class PrefixSerializerOutOnlyName(serializers.ModelSerializer):
+    """Handle deserialization."""
+
+    name = serializers.CharField(read_only=True)
+
+    class Meta:
+        model = Prefix
+        fields = ["name"]
 
 
 class ItemSerializerOut(serializers.ModelSerializer):
