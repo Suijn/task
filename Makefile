@@ -12,9 +12,9 @@ PGDATA = /dbvolume
 
 demo:
 	make admin
-	docker compose up --build server -d
-	docker exec task_server bash -c ".venv/bin/poetry run python manage.py prefixes"
-	docker attach task_server
+	docker compose up --build demo -d
+	docker exec task_demo bash -c ".venv/bin/poetry run python manage.py prefixes"
+	docker attach task_demo
 
 server:
 	docker volume create ${VOLUME}
