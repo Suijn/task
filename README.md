@@ -20,9 +20,9 @@ Additionally this creates a default admin user. (for details see section: **Defa
 #### Docker & Compose
 ```bash
 $ docker volume create dbvolume \ 
-&& docker compose up --build server -d \
-&& docker exec task_server bash -c ".venv/bin/poetry run python manage.py prefixes" \
-&& docker attach task_server
+&& docker compose up --build demo -d \
+&& docker exec task_demo bash -c ".venv/bin/poetry run python manage.py prefixes" \
+&& docker attach task_demo
 ```
 This command starts the app server on http://0.0.0.0:8000/
 

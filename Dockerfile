@@ -1,6 +1,7 @@
 FROM python:3.12 as system
 WORKDIR "app"
 
+ENV PYTHONUNBUFFERED = 1
 ENV USER=app_user
 ENV GROUP=regular_users
 ENV VENV_PATH=.venv
