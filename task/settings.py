@@ -46,6 +46,9 @@ INSTALLED_APPS = [
     "drf_spectacular",
 ] + PROJECT_APPS
 
+
+CUSTOM_MIDDLEWARES = ["task.middlewares.LoggingMiddleware"]
+
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -54,7 +57,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-]
+] + CUSTOM_MIDDLEWARES
 
 ROOT_URLCONF = "task.urls"
 
