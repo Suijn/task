@@ -16,7 +16,7 @@ class LoggingMiddleware:
             correlation_id = uuid.uuid4()
 
         # Inject request_id in the log context.
-        structlog.contextvars.bind_contextvars(correlation_id=correlation_id)
+        structlog.contextvars.bind_contextvars(correlation_id=str(correlation_id))
 
         response = self.get_response(request)
         return response
