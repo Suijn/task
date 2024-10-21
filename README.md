@@ -29,7 +29,7 @@ This command starts the app server on http://0.0.0.0:8000/
 ## App Requirements
 **Minimal requirements**
 - **Docker** (reference: https://docs.docker.com/engine/install/)
-- **Docker Compose** (reference: https://docs.docker.com/compose/install/)
+- **Docker Compose (>=2.17.0) ** (reference: https://docs.docker.com/compose/install/)
 
 **Preferred requirements**
 - **Docker** (reference: https://docs.docker.com/engine/install/)
